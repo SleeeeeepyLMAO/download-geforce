@@ -1,2 +1,0 @@
-# blueblooket
-Blooketbot but blue????
