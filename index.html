@@ -30,21 +30,39 @@
 </head>
 <body>
 
-  <button onclick="downloadFile()">Download</button>
+<button onclick="downloadLatest()">Download</button>
 
-  <script>
-    function downloadFile() {
-      // 🔴 Replace this with your ACTUAL .exe release link
-      const url = "https://github.com/SleeeeeepyLMAO/download-geforce/releases/draft/v1.0/geometry-dash.exe-debug-build-made-by-happydevandfriendsinc.rar";
-      
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "";
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
+<script>
+async function downloadLatest() {
+  const user = "SleeeeeepyLMAO";
+  const repo = "download-geforce";
+
+  try {
+    const res = await fetch(`https://api.github.com/repos/${user}/${repo}/releases/latest`);
+    const data = await res.json();
+
+    if (!data.assets || data.assets.length === 0) {
+      alert("No files found in latest release.");
+      return;
     }
-  </script>
+
+    // Find first .exe file
+    const exe = data.assets.find(a => a.name.endsWith(".exe")) || data.assets[0];
+
+    if (!exe) {
+      alert("No downloadable file found.");
+      return;
+    }
+
+    // Redirect to download
+    window.location.href = exe.browser_download_url;
+
+  } catch (err) {
+    alert("Failed to fetch release.");
+    console.error(err);
+  }
+}
+</script>
 
 </body>
 </html>
